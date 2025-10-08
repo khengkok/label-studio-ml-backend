@@ -31,6 +31,25 @@ def init_app(model_class, basic_auth_user=None, basic_auth_pass=None):
     return _server
 
 
+## Fix serialization of numpy float32 type
+import numpy as np
+
+def _convert_to_py(obj):
+    """Recursively convert numpy/tensor values to Python types"""
+    if isinstance(obj, (np.float32, np.float64)):
+        return float(obj)
+    elif isinstance(obj, (np.int32, np.int64)):
+        return int(obj)
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, dict):
+        return {k: _convert_to_py(v) for k, v in obj.items()}
+    elif isinstance(obj, (list, tuple)):
+        return [_convert_to_py(i) for i in obj]
+    else:
+        return obj
+    
+
 @_server.route('/predict', methods=['POST'])
 @exception_handler
 def _predict():
@@ -86,7 +105,9 @@ def _predict():
     if isinstance(res, dict):
         res = response.get("predictions", response)
 
-    return jsonify({'results': res})
+    res2 = _convert_to_py(res)
+
+    return jsonify({'results': res2})
 
 
 @_server.route('/setup', methods=['POST'])
