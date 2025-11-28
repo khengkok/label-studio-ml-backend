@@ -3,7 +3,7 @@ version: "3.11"
 services:
   grounding_dino:
     container_name: grounding_dino
-    image: heartexlabs/label-studio-ml-backend:grnddino-master
+    image: ainyp/label-studio-ml-backend:grnddino-windows
     init: true
     build:
       context: .
@@ -21,8 +21,8 @@ services:
       - LOG_LEVEL=DEBUG
 
       # Add these variables if you want to access the images stored in Label Studio
-      - LABEL_STUDIO_HOST=https://app.heartex.com/
-      - LABEL_STUDIO_ACCESS_TOKEN=your_access_token
+      - LABEL_STUDIO_HOST=https://192.168.68.127:8080
+      - LABEL_STUDIO_ACCESS_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6ODA3MTUxNDMxMSwiaWF0IjoxNzY0MzE0MzExLCJqdGkiOiI0MzNkZjEyOGE1Yjk0MGMxYmEzYTI0ZjM0N2ZjZWViZSIsInVzZXJfaWQiOjF9.oNV0Qq7iSeydMeYYLiXKpqIwcGZsqb36_xPOOLIyTkk
 
       - BOX_THRESHOLD=0.30
       - TEXT_THRESHOLD=0.25
